@@ -1,5 +1,6 @@
 const express=require("express")
 const app=express()
+const moment=require('moment');
 const bcrypt=require('bcrypt');
 var cors=require('cors');
 app.use(cors());
@@ -51,97 +52,45 @@ router.post('/availableslot',async(req,res)=>{
     var endtime=req.body.end;
     var slot=req.body.slot;
     var date=req.body.date;
-
-  starttimehours=parseInt(starttime.slice(0,2));
- 
- starttimeminute=parseInt(starttime.slice(3,5));
- 
- sm=starttimehours*60+starttimeminute
- 
- 
- endtimehours=parseInt(endtime.slice(0,2));
- 
- endtimeminute=parseInt(endtime.slice(3,5));
- em=endtimehours*60+endtimeminute
- 
- totalminutes=em-sm
-
- 
- loop=Math.trunc(totalminutes/slot)
- a=[];
- if(starttimehours<10)
- {
-   var st='0'+starttimehours
- }
- else{
-    st=starttimehours
- }
- if(starttimeminute==0)
- {
-    var sm='0'+starttimeminute
- }
- else{
-     sm=starttimeminute;
- }
- 
- var b=date+"T"+st+':'+sm+':00'
-
-
-
- a.push(b);
- for(var i=1;i<=loop;i++)
- {
+    var a=[];
+    function getTimeStops(start, end){
+        var startTime = moment(start, 'HH:mm');
+        var endTime = moment(end, 'HH:mm');
+        
+        if( endTime.isBefore(startTime) ){
+          endTime.add(1, 'day');
+        }
+      
+      
+      
+        while(startTime <= endTime){
+          a.push(new moment(startTime).format('HH:mm'));
+          startTime.add(slot, 'minutes');
+          
+        }
+        
+      }
+      getTimeStops(starttime, endtime);
    
-  var m1=starttimeminute+i*slot;
- m1=m1%60;
- slot=parseInt(slot);
- 
- 
- 
- 
- if(m1==0)
+k=[];
+
+ for(var i=0;i<=a.length;i++)
  {
-     m1='00'
-     starttimehours=starttimehours+1;
- }
- else if(m1<10)
- {
-     m1='0'+m1
- } 
+    st=date+'T'+a[i]+':00'
+    k.push(st); 
 
- if(starttimehours<10)
- {
-     h="0"+starttimehours;
- }
- else{
-     h=starttimehours;
- }
-
-
-
-
-var k=date+"T"+h+':'+m1+':00'
-
-a.push(k);
- 
-
- if(m1+slot>59)
- {
- starttimehours=starttimehours+1;
- }
-
- }
- for(var i=0;i<=a.length-2;i++)
- {
-    var slot = {
+  }
+ for(var i=0;i<k.length-2; i++) {
+     var slot = {
       
         color:"green",
-          start: a[i],
-          end:a[i+1],
+          start: k[i],
+          end:k[i+1],
           title: "available",
           allDay:false
-      };
- 
+      }; 
+
+      
 db.insertslot(slot,res)
  
 }
