@@ -10,146 +10,6 @@ MongoClient.connect('mongodb://localhost:27017/patients', function (err, client)
 exports.createcol=function(){
   console.log("connected");
 }
-/*------------------------------ create collection in mongodb ---------------
-
-db.createCollection("SlotManagement",function(err,result){
-  if(err) throw err;
-  console.log("collection is Created");
-  db.close();  
-});
-
-----------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exports.insertuser=function(insobj){
-//var data={name:"Mukesh2",email:"abc@12314", pass:"12345"};
-
-
-
-db.collection("patients").insertOne(insobj,function(err,res){
-  if(err) 
-  {
-    throw err
-  }
-  else{
- 
-  }
-})
-
-}
-
-exports.insertslot=async function(slotobj,res){
-  
-db.collection("SlotManagement").insertOne(slotobj,function(err){
-  if(err) throw err
-  })
-}
-
-exports.getAllslots=()=>{
-  console.log("hasjdhash")
-  db.collection("SlotManagement").find().toArray(function(err,result){
-  console.log(result)
-  return result
-      })
-}
-
-/* ------------get all  slot-------------------------------------- */
-
-exports.allslot=function(slotobj){
-db.collection("SlotManagement").find().toArray(function(err,result){
-if(err){
-  throw err;
-}
-else
-{
-
-  slotobj.status(200).send(result);
-}
-
-})
-}
-/*----------------------get Available slot---------------------------- */
-exports.availableslot=function(slotobj){
-  db.collection("SlotManagement").find({slottype:"available"}).toArray(function(err,result){
-  if(err){
-    throw err;
-  }
-  else
-  {
-  
-    slotobj.send(result);
-  }
-  
-  })
-  }
-/*----------------------get Booked slot------------------------------------ */
-exports.bookedslot=function(slotobj){
-  db.collection("SlotManagement").find({slottype:"booked"}).toArray(function(err,result){
-  if(err){
-    throw err;
-  }
-  else
-  {
-  
-    slotobj.send(result);
-  }
-  
-  })
-  }
-
-/* ---------------------delete slot-------------------------- */
-exports.deleteslot=function(slotid,res)
-{
-
-db.collection("SlotManagement").deleteOne(slotid,function(err,obj){
-  if (err) throw err;
-  db.collection("SlotManagement").find().toArray(function(err,result){
-  res.send(result);
-  })
-});
-}
-/* ------------------------book slot------------------------------- */
-exports.bookslot=function(bookid,userdetails,res)
-{
-
- db.collection("SlotManagement").updateMany(
-  {_id:bookid},
-  {$set:{
-    title:"booked",
-   color:"red",
-   userid:userdetails
-  }
-},function(err,obj){
-  if(err) throw err;
-  db.collection("SlotManagement").find().toArray(function(err,result){
-  res.send(result);
-    })
-  });
-
-
-}
-
 
 
 
@@ -179,11 +39,12 @@ else{
       }, "helloMyNameisMukeshBhatt",{
           
       });
-      
-      res.json({token});
+
+      outp.json({token});
+
       }
       else{
-    /*     outp.json({"msg":"incorrect Password"}); */
+    
           outp.json(1);
       }
 
@@ -209,15 +70,6 @@ else{
 
 
 
-
-/* db.createCollection("patients",function(err,res){
-  if(err){
-    throw err;
-  }
-  else{
-    console.log("user created");
-  }
-}); */
 
 
 
