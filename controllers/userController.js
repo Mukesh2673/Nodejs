@@ -1,7 +1,7 @@
 const { response } = require('express');
 const { users, Sequelize } = require('../models');
 var db = require('../models')
-const {Op}=require('sequelize');
+const {Op,QueryTypes}=require('sequelize');
 const User = db.users;
 var addUser = async (req, res) => {
     //1  let data=await User.create({name:'demo',email:'mks1234@gmail.com'});   
@@ -194,10 +194,27 @@ let response ={
     res.status(200).json(response);
 
 } */
+}
+var rawQuery=async(req,resp)=>{
+    const users=await db.Sequelize.query("Select * from users where gender=:gender",{
+        type:QueryTypes.SELECT,
+        //model:Users,
+        //mapToModel:true,
+        //raw:true
+        replacements :{gender:'male'},//gender=:gender
+        replacements :['male'] //gender=?
+    });
+    let response={
+        data:'Raw Query',record:users
+    }
+    resp.status(200).json(response);
+}
+
 
 module.exports = {
     addUser,
     crudOperation,
     queryData,
-    finderData
+    finderData,
+    rawQuery
 }

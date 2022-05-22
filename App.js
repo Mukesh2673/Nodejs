@@ -10,6 +10,7 @@ app.get("/add",userCtrl.addUser);
 app.get("/crud",userCtrl.crudOperation)
 app.get("/query",userCtrl.queryData)
 app.get("/finder",userCtrl.finderData)
+app.get("/raw-query",userCtrl.rawQuery)
 app.listen(port,()=>{
     console.log(`App is running at http://localhost:${port}`);
 })
